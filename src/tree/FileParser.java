@@ -12,7 +12,7 @@ public class FileParser {
 		Stack<TreeNode> s = new Stack<TreeNode>();
 		s.push(root);
 		try {
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename), "UTF-8");
 			BufferedReader br = new BufferedReader(reader);
 			String line = br.readLine();
 			while(line != null) {

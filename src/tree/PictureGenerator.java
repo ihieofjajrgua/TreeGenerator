@@ -15,7 +15,6 @@ public class PictureGenerator {
 		
 		BufferedImage bi = new BufferedImage(tWidth * bWidth, tHeight * bHeight, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bi.getGraphics();
-		Font f = g.getFont();
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
