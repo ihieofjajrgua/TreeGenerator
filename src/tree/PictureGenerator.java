@@ -1,48 +1,56 @@
 package tree;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class PictureGenerator {
-	private int left;
+	private int left, bWidth = 200, bHeight = 100;
 	
 	public BufferedImage generatePicture(TreeNode root) {
 		int[] result = getPicWidthAndHeight(root);
-		int height = result[1] - 1, width = result[0];
-		System.out.println(width + "," + height);
+		int tHeight = result[1] - 1, tWidth = result[0];
+		System.out.println(tWidth + "," + tHeight);
 		
-		BufferedImage bi = new BufferedImage(width * 100, height * 100, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(tWidth * bWidth, tHeight * bHeight, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bi.getGraphics();
+		Font f = g.getFont();
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		
 		g.setColor(Color.BLACK);
 		left = 0;
-		drawNodes(root, g, -100);
+		drawNodes(root, g, -bHeight);
 		g.dispose();
 		
 		return bi;
 	}
 	
 	private int drawNodes(TreeNode root, Graphics g, int height) {
+		int strWidth = g.getFontMetrics().stringWidth(root.val);
+		int strHeight = g.getFontMetrics().getHeight();
+		int strDescent = g.getFontMetrics().getDescent();
 		if(root.childs.isEmpty()) {
-			g.drawRect(left + 25, height + 25, 50, 50);
+			g.drawRect(left + bWidth / 4, height + bHeight / 4, bWidth / 2, bHeight / 2);
+			g.drawString(root.val, left + bWidth / 2 - strWidth / 2, height + bHeight / 2 + strHeight / 2 - strDescent);
 			if(height > 0)
-				g.drawLine(left + 50, height + 25, left + 50, height);
-			left += 100;
-			return left - 50;
+				g.drawLine(left + bWidth / 2, height + bHeight / 4, left + bWidth / 2, height);
+			left += bWidth;
+			return left - bWidth / 2;
 		}
 		else {
-			int fc = drawNodes(root.childs.get(0), g, height + 100), lc = fc;
+			int fc = drawNodes(root.childs.get(0), g, height + bHeight), lc = fc;
 			for(int i = 1; i < root.childs.size(); i++)
-				lc = drawNodes(root.childs.get(i), g, height + 100);
+				lc = drawNodes(root.childs.get(i), g, height + bHeight);
 			int ret = (fc + lc) / 2;
 			if(height > 0)
-				g.drawLine(ret, height + 25, ret, height);
-			g.drawRect(ret - 25, height + 25, 50, 50);
-			g.drawLine(fc, height + 100, lc, height + 100);
-			g.drawLine(ret, height + 75, ret, height + 100);
+				g.drawLine(ret, height + bHeight / 4, ret, height);
+			g.drawRect(ret - bWidth / 4, height + bHeight / 4, bWidth / 2, bHeight / 2);
+			g.drawString(root.val, ret - strWidth / 2, height + bHeight / 2 + strHeight / 2 - strDescent);
+			g.drawLine(fc, height + bHeight, lc, height + bHeight);
+			g.drawLine(ret, height + bHeight * 3 / 4, ret, height + bHeight);
 			return ret;
 		}
 	}
