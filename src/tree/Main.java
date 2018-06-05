@@ -16,6 +16,10 @@ public class Main {
 			System.err.println("文件不存在！");
 			return;
 		}
+		else if(!pathname.substring(pathname.lastIndexOf(".") + 1).equals("tree")) {
+			System.err.println("非tree格式文件，无法打开！");
+			return;
+		}
 		
 		FileParser parser = new FileParser();
 		TreeNode root = parser.parse(txt);
